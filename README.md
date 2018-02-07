@@ -1,1 +1,2 @@
 # ShiroDemo
+一个基于SSM框架的Shiro权限的小demo，含RememberMe记住密码功能
