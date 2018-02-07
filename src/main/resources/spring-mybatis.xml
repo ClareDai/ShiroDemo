@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:aop="http://www.springframework.org/schema/aop"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-4.3.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+http://www.springframework.org/schema/tx
+http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+"
+>
+<!-- 自动扫描包 -->
+<context:component-scan base-package="org.dxs.*"></context:component-scan>
+ 
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+	<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+    <property name="url" value="jdbc:mysql://localhost:3306/shirodemo" />
+    <property name="username" value="root" />
+    <property name="password" value="123456" />
+    <!-- 可同时连接的最大的连接数 -->
+    <property name="maxActive" value="60" />
+    <!-- 最大的空闲的连接数 -->
+    <property name="maxIdle" value="60" />
+    <!-- 最小的空闲的连接数，低于这个数量会被创建新的连接，默认为0 -->
+    <property name="minIdle" value="5" />
+    <!-- 连接池启动时创建的初始化连接数量，默认值为0 -->
+    <property name="initialSize" value="1" />
+    <!-- 等待连接超时时间，毫秒，默认为无限 -->
+    <property name="maxWait" value="30000" />
+</bean>
+
+ 
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+	<property name="dataSource" ref="dataSource"></property>
+	<property name="typeAliasesPackage" value="org.dxs.entity"></property>
+	
+	<property name="plugins">
+    <array>
+      <bean class="com.github.pagehelper.PageInterceptor">
+        <property name="properties">
+          <!--使用下面的方式配置参数，一行配置一个 -->
+          <value>
+            helperDialect=mysql
+            rowBoundsWithCount=true
+            supportMethodsArguments=true
+            reasonable=true
+          </value>
+        </property>
+      </bean>
+    </array>
+  </property>
+</bean>
+
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+   <property name="basePackage" value="org.dxs.dao"></property>
+</bean>
+
+<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">    
+    <!-- 设置默认编码 -->  
+    <property name="defaultEncoding" value="utf-8"></property>  
+    <!-- 上传图片最大大小5M-->   
+    <property name="maxUploadSize" value="5242440"></property>    
+</bean>
+ 
+<!-- 事务管理 -->
+<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+	<property name="dataSource" ref="dataSource"></property>
+</bean>
+
+
+<tx:annotation-driven/>
+
+
+
+ 
+ 
+</beans>

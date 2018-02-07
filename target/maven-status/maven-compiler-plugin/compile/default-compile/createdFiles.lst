@@ -1,0 +1,11 @@
+org\dxs\controller\UserController.class
+org\dxs\entity\User.class
+org\dxs\service\impl\UserServiceImpl.class
+org\dxs\service\UserService.class
+org\dxs\entity\Permission.class
+org\dxs\entity\Role.class
+org\dxs\dao\RoleMapper.class
+org\dxs\util\Message.class
+org\dxs\dao\PermissionMapper.class
+org\dxs\dao\UserMapper.class
+org\dxs\shiro\UserRealm.class
